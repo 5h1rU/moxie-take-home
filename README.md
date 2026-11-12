@@ -2,7 +2,7 @@
 
 A public booking page in three steps, **Contact → Payment → Confirmation**, built from the Figma design with Next.js (App Router), React 19, and TypeScript.
 
-- **Hosted page:** _deploying to Vercel; link coming_
+- **Hosted page:** https://moxie-take-home-tau.vercel.app/booking/gold-spa (Vercel, with the mock API running in the server)
 - **Repository:** https://github.com/5h1rU/moxie-take-home
 
 The page opens on `/booking/gold-spa`. `/booking/glow-med-spa` is a second business with different data (no logo, another timezone, another cancellation policy), which shows that nothing about the business is hardcoded.
