@@ -1,0 +1,25 @@
+{
+  "business": {
+    "id": "biz_glow_med_spa",
+    "slug": "glow-med-spa",
+    "name": "Glow Med Spa",
+    "logoUrl": null,
+    "address": {
+      "line1": "1450 Brickell Ave",
+      "city": "Miami",
+      "region": "FL",
+      "postalCode": "33131",
+      "country": "US"
+    },
+    "email": "hello@glowmedspa.com",
+    "phone": "+13055550187",
+    "timezone": "America/New_York",
+    "currency": "USD"
+  },
+  "cancellationPolicy": {
+    "version": "glow-2026-03",
+    "noticeHours": 48,
+    "feeCents": 7500,
+    "text": "Please give us at least 48 hours' notice to cancel or reschedule. Late cancellations and no-shows are charged a $75 fee. Your card is kept on file for this purpose and will not be charged now."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "startsAt": "2026-12-03T14:30:00-08:00",
+  "provider": { "id": "prov_ana_ruiz", "name": "Dr. Ana Ruiz" },
+  "services": [
+    { "id": "svc_botox", "name": "Botox", "durationMinutes": 45, "priceCents": 20000 },
+    { "id": "svc_hydrafacial", "name": "HydraFacial", "durationMinutes": 30, "priceCents": 15000 }
+  ]
+}

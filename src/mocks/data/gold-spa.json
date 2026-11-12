@@ -1,0 +1,26 @@
+{
+  "business": {
+    "id": "biz_gold_spa",
+    "slug": "gold-spa",
+    "name": "Gold Spa",
+    "logoUrl": "/logos/gold-spa.png",
+    "address": {
+      "line1": "2525 Camino del Rio S",
+      "line2": "Suite 315 Room 8",
+      "city": "San Diego",
+      "region": "CA",
+      "postalCode": "92108",
+      "country": "US"
+    },
+    "email": "goldspa@gmail.com",
+    "phone": "+16195550142",
+    "timezone": "America/Los_Angeles",
+    "currency": "USD"
+  },
+  "cancellationPolicy": {
+    "version": "gold-spa-2026-01",
+    "noticeHours": 24,
+    "feeCents": 5000,
+    "text": "We ask that you please reschedule or cancel at least 24 hours before the beginning of your appointment or you may be charged a cancellation fee of $50. In the event of emergency, contact us directly. Your card will be held in case of late cancellation and for future purchases. It will not be charged now."
+  }
+}
