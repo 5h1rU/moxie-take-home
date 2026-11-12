@@ -41,18 +41,38 @@ On the final submit, the browser console shows **`Booking request`** (the object
 
 ## How it works
 
-```
-Browser                                 Next.js server                         "Booking API" (MSW in Node)
-───────                                 ──────────────                         ──────────────────────────
-                                        page.tsx (Server Component) ─ fetch ─▶ GET /booking-pages/:slug
-                                          'use cache' per business slug        GET /booking-pages/:slug/selection
-<BookingFlow> client island ◀─ props ──
-  Contact form ─ zod, in the browser
-  Payment form ─ zod → tokenizeCard()
-     console.log(request)
-     createBooking() ── Server Action ─▶ actions.ts: zod again ──── fetch ───▶ POST /bookings (Idempotency-Key)
-     console.log(booking) ◀──── result ─┘
-  Confirmation, from the server's booking
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Visitor
+    participant Flow as BookingFlow<br/>(client component)
+    participant Page as page.tsx<br/>(Server Component)
+    participant Action as createBooking<br/>(Server Action, actions.ts)
+    participant API as Booking API<br/>(MSW in Node)
+
+    Visitor->>Page: GET /booking/:slug
+    par loaded in parallel
+        Page->>API: GET /booking-pages/:slug ('use cache' per slug)
+    and
+        Page->>API: GET /booking-pages/:slug/selection
+    end
+    API-->>Page: business, cancellation policy, selection
+    Page-->>Flow: props (page, selection, createBooking)
+
+    Visitor->>Flow: Submit Contact form
+    Flow->>Flow: zod validates contact, pushes ?step=payment
+    Visitor->>Flow: Submit Payment form
+    Flow->>Flow: zod validates card, tokenizeCard()
+    Note over Flow: Card number and CVV never leave the browser
+    Flow->>Flow: console.log(request)
+    Flow->>Action: createBooking(request, idempotencyKey)
+    Action->>Action: zod validates the request again
+    Action->>API: POST /bookings (Idempotency-Key)
+    API->>API: validates the body, prices the services
+    API-->>Action: 201 booking, or 402 / 409 / 422
+    Action-->>Flow: booking, or an error value
+    Flow->>Flow: console.log(booking), replaces the history entry
+    Flow-->>Visitor: Confirmation from the server's booking
 ```
 
 - **The page loads data, the Server Action submits it.** `page.tsx` loads the business and the visitor's selection on the server and hands plain props to one client component. The browser never calls the API directly: it calls the Server Action, which calls the API (a backend-for-frontend).
@@ -150,4 +170,4 @@ Not much, because every layer reads from the same schemas:
 
 - **Ask what kind of messages first.** Payment already discloses *transactional* messages. If this is for marketing, it's a separate consent with legal weight (TCPA in the US): it must be opt-in, the copy needs legal sign-off, and it needs "Msg & data rates may apply. Reply STOP to opt out" language.
 - **Ask where it belongs.** Should it appear only once a phone number is entered? Is the consent per business or for the whole platform?
-- **Agree on timing.** It's about half a day including copy review and tests. I'd confirm whether it goes into this release or a fast follow, so the deadline doesn't slip silently, and I'd post that decision where the team can see it.
+- **Record the decision on the ticket.** The change is small, so the risk isn't time, it's lost context. I'd write the request, the answers to the questions above, and who approved the consent copy on the feature's Linear (or Jira) issue, not only in Slack, so whoever later asks why the checkbox exists or what users agreed to can find it.
