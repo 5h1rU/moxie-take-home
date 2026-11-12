@@ -64,7 +64,7 @@ export function BookingFlow({
 
   if (step === "confirmed" && booking) {
     return (
-      <Container size="narrow" as="main">
+      <Container size="narrow">
         <VStack gap={16}>
           {title}
           <ConfirmationStep booking={booking} business={page.business} />
@@ -74,7 +74,7 @@ export function BookingFlow({
   }
 
   return (
-    <Container as="main" reserveBottomBar>
+    <Container reserveBottomBar>
       <VStack gap={16}>
         {title}
         <Grid columns={{ base: "single", desktop: "sidebar" }} gap={{ base: 12, desktop: 30 }}>

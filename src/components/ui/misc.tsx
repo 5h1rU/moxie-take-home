@@ -11,7 +11,7 @@ export function Card({
   children?: ReactNode;
   /** `sm`: 16px. `lg`: 24/16px on mobile, 48/60px on desktop (the step card). */
   padding?: "sm" | "lg";
-  as?: "div" | "section" | "aside";
+  as?: "div" | "section";
 }) {
   return (
     <Element

@@ -4,8 +4,7 @@
 @theme {
   --font-sans: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif;
 
-  /* Named for the design. 768px and 1200px. */
-  --breakpoint-tablet: 48rem;
+  /* Named for the design: the two-column layout starts at 1200px. */
   --breakpoint-desktop: 75rem;
 
   --color-page: #f4f4f6; /* Grey 20 */
@@ -19,7 +18,7 @@
   --color-primary: #8a1d96; /* Violet/90 */
   --color-primary-strong: #6f1779;
   --color-primary-soft: #f6e8f8;
-  /* The design has no error color: 5.9:1 on white, passes WCAG AA. */
+  /* The design has no error color: 5.7:1 on white, passes WCAG AA. */
   --color-danger: #c42b1c;
   --color-danger-soft: #fdf0ee;
   --color-success-soft: #d1faec;

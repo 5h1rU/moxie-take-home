@@ -54,7 +54,14 @@ export function PaymentStep({
       });
       console.log("Booking request", request);
 
-      const result = await createBooking(request, idempotencyKey);
+      let result;
+      try {
+        result = await createBooking(request, idempotencyKey);
+      } catch {
+        // The Server Action itself was unreachable (offline, or a redeploy). Throwing
+        // would replace the form with error.tsx, so keep the form and offer a retry.
+        return { values, errors: {}, formError: "We couldn't reach the server. Check your connection and try again." };
+      }
       if (!result.ok) {
         return { values, errors: result.fieldErrors ?? {}, formError: result.fieldErrors ? undefined : result.message };
       }

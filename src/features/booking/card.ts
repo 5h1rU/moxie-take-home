@@ -38,7 +38,7 @@ export function formatCardNumber(value: string): string {
   return parts.join(" ");
 }
 
-/** "0428" → "04 / 28". A leading 2–9 is a month on its own, so "4" → "04 / ". */
+/** "0428" → "04 / 28". A leading 2–9 is a month on its own, so "4" → "04". */
 export function formatExpiry(value: string): string {
   let digits = onlyDigits(value).slice(0, 4);
   if (/^[2-9]/.test(digits)) digits = `0${digits}`.slice(0, 4);

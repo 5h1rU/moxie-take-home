@@ -3,7 +3,7 @@ import { Card, Heading, Text } from "@/components/ui";
 
 export default function NotFound() {
   return (
-    <Container size="narrow" as="main">
+    <Container size="narrow">
       <Card padding="lg">
         <VStack gap={8}>
           <Heading level={1} tone="title">

@@ -5,7 +5,7 @@ import { Button, Card, Heading, Text } from "@/components/ui";
 
 export default function BookingError({ retry }: { error: Error & { digest?: string }; retry: () => void }) {
   return (
-    <Container size="narrow" as="main">
+    <Container size="narrow">
       <Card padding="lg">
         <VStack gap={16} align="start">
           <Heading level={1}>We couldn&apos;t load this booking page</Heading>

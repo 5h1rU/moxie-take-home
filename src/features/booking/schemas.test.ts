@@ -43,6 +43,15 @@ describe("paymentSchema", () => {
     expect(paymentErrors({ ...validPayment, cvv: "1234" })).toEqual({ cvv: "Enter the 3-digit security code." });
   });
 
+  it("reports the CVV length together with other errors, not after they're fixed", () => {
+    const amex = { ...validPayment, cardNumber: "3782 822463 10005", cvv: "123" };
+    expect(paymentErrors({ ...amex, acceptPolicy: undefined, expiry: "10 / 26" })).toEqual({
+      cvv: "Enter the 4-digit security code.",
+      expiry: "This card has expired.",
+      acceptPolicy: "Please accept the cancellation policy to continue.",
+    });
+  });
+
   it("requires the cancellation policy to be accepted", () => {
     // An unchecked checkbox is absent from FormData.
     expect(paymentErrors({ ...validPayment, acceptPolicy: undefined })).toEqual({

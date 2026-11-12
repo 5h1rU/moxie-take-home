@@ -1,10 +1,5 @@
 import type { ReactNode } from "react";
 
-/** Centers its children on both axes. */
-export function Center({ children }: { children?: ReactNode }) {
-  return <div className="flex items-center justify-center">{children}</div>;
-}
-
 /**
  * Renders children only above or below the desktop breakpoint (1200px).
  * Uses `display: contents`, so it adds no box to the layout.

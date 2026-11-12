@@ -13,9 +13,10 @@ Requires Node 22.12+ and pnpm.
 
 ```bash
 pnpm install
-cp .env.example .env.local   # API_MOCKING=enabled, API_URL=https://api.moxie-booking.test
-pnpm dev                     # http://localhost:3000
+pnpm dev        # http://localhost:3000
 ```
+
+No environment setup is needed: the mock booking API runs inside the Next.js server by default. `.env.example` documents the two settings (`API_MOCKING=disabled` turns the mock off, `API_URL` points at a real API).
 
 | Command | What it does |
 | --- | --- |
@@ -24,7 +25,7 @@ pnpm dev                     # http://localhost:3000
 | `pnpm lint` | ESLint, including the styling and import boundaries described below |
 | `pnpm build && pnpm start` | Production build; the mock API runs in it too |
 
-On the final submit, the browser console shows **`Booking request`** (the object the page sends) and **`Booking confirmed`** (what the server answered). The server logs each mock API call as `[mock api] …`.
+On the final submit, the browser console shows **`Booking request`** (the object the page sends) and **`Booking confirmed`** (what the server answered). The server logs the mock API's responses as `[mock api] …`.
 
 ### Try the failure paths
 
@@ -59,7 +60,7 @@ Browser                                 Next.js server                         "
 - **Nothing about the business is hardcoded in components.** Name, logo, address, email, phone, timezone, and the cancellation policy (text, fee, version) come from `GET /booking-pages/:slug`. The services, provider, and time come from a fixture standing in for the earlier booking steps this exercise doesn't include. Prices, durations, and dates are formatted from cents, minutes, and ISO timestamps, and the time is shown in the business's timezone.
 - **One contract, validated three times.** `src/lib/types.ts` holds zod schemas for the API. The browser validates the forms, the Server Action validates the request again (it's a public endpoint), and the mock backend validates the body and prices the services itself. The request sends ids, never prices.
 - **Forms are native.** Each step is a `<form action>` with `useActionState`, read through `FormData`, with uncontrolled inputs. `useFormStatus` drives the pending button. Errors show on submit, focus jumps to the first invalid field, and a field's error clears as you edit it. Expected server failures come back as values, not exceptions, so the form keeps what you typed.
-- **Card data never leaves the browser.** `tokenizeCard()` stands in for Stripe Elements: the request, the logs, and the server only see a payment-method token, brand, last 4 digits, expiry, and billing zip. The request schema is strict, so a body with a card number or CVV is rejected.
+- **Card data never leaves the browser.** `tokenizeCard()` stands in for Stripe Elements: the request, the logs, and the server only see a payment-method token, brand, last 4 digits, expiry, and billing zip. The request's payment object is strict, so a payment that carries a card number or CVV is rejected.
 - **Retries are safe.** Each booking attempt carries an `Idempotency-Key`, and the mock returns the same booking for a repeated key.
 - **The step lives in the URL** (`?step=payment`), so browser back and forward work; the entered data lives only in memory. After booking, the history entry is replaced so Back can't reopen Payment.
 
@@ -106,7 +107,7 @@ src/
 
 1. **Two primary buttons on desktop Payment** (the inline "Book appointment" and the bottom bar's "Continue"). "Book appointment" is the only submit; the desktop bottom bar holds **Back** instead.
 2. **No way to go back.** Added Back (bottom bar on desktop, top of the card on mobile). It keeps what you typed.
-3. **No error, focus, loading, or submitting states.** Defined from the design tokens. The design has no error color, so I picked an accessible red (5.9:1 contrast on white).
+3. **No error, focus, loading, or submitting states.** Defined from the design tokens. The design has no error color, so I picked an accessible red (5.7:1 contrast on white).
 4. **No tablet frame.** Two columns from 1200px, where the desktop layout fits; below that, the mobile layout in a centered column up to 720px.
 5. **Confirmation differs between mobile (services card) and desktop (none).** Both now show one appointment summary (date and time, provider, services, total) built from the booking the server returned.
 6. **The cancellation checkbox is a consent**, so it's required.

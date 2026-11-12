@@ -53,21 +53,27 @@ export const paymentSchema = z
         }
         return expiry;
       }),
-    cvv: z.string().regex(/^\d{3,4}$/, "Enter the 3-digit security code."),
+    cvv: z.string(),
     postalCode: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit zip code."),
     // An unchecked checkbox is missing from FormData; a checked one sends "on".
     acceptPolicy: z.literal("on", "Please accept the cancellation policy to continue."),
   })
-  .superRefine((data, ctx) => {
-    const amex = detectBrand(data.cardNumber) === "amex";
-    if (data.cvv.length !== (amex ? 4 : 3)) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["cvv"],
-        message: amex ? "Enter the 4-digit security code." : "Enter the 3-digit security code.",
-      });
-    }
+  // The CVV length depends on the card brand, so it's checked on the whole object.
+  .refine((data) => new RegExp(`^\\d{${cvvLength(data.cardNumber)}}$`).test(data.cvv), {
+    path: ["cvv"],
+    // By default an object check is skipped when another field already failed;
+    // run it whenever both values are there, so every error shows on one submit.
+    when: ({ value }) => {
+      const data = value as { cardNumber?: unknown; cvv?: unknown } | undefined;
+      return typeof data?.cardNumber === "string" && typeof data.cvv === "string";
+    },
+    error: (issue) =>
+      `Enter the ${cvvLength((issue.input as { cardNumber: string }).cardNumber)}-digit security code.`,
   });
+
+function cvvLength(cardNumber: string) {
+  return detectBrand(cardNumber) === "amex" ? 4 : 3;
+}
 
 export type ContactData = z.output<typeof contactSchema>;
 export type PaymentData = z.output<typeof paymentSchema>;

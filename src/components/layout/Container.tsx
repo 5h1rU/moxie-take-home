@@ -11,12 +11,12 @@ type ContainerProps = {
   size?: "wide" | "narrow";
   /** Leaves room at the bottom for a fixed BottomBar, so it never covers content. */
   reserveBottomBar?: boolean;
-  as?: "div" | "main" | "header";
 };
 
-export function Container({ children, size = "wide", reserveBottomBar = false, as: Element = "div" }: ContainerProps) {
+/** The page's main landmark, with the page width and padding. */
+export function Container({ children, size = "wide", reserveBottomBar = false }: ContainerProps) {
   return (
-    <Element
+    <main
       className={clsx(
         "mx-auto w-full max-w-[752px] px-4 pt-4 pb-6 desktop:px-10 desktop:pt-15 desktop:pb-15",
         size === "wide" ? "desktop:max-w-[1280px]" : "desktop:max-w-[622px]",
@@ -24,6 +24,6 @@ export function Container({ children, size = "wide", reserveBottomBar = false, a
       )}
     >
       {children}
-    </Element>
+    </main>
   );
 }

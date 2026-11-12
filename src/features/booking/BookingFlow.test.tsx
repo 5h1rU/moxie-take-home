@@ -42,12 +42,12 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-function renderFlow() {
+function renderFlow(createBookingAction: typeof createBooking = createBooking) {
   render(
     <BookingFlow
       page={bookingPageSchema.parse(goldSpa)}
       selection={appointmentSelectionSchema.parse(selection)}
-      createBooking={createBooking}
+      createBooking={createBookingAction}
     />,
   );
   return userEvent.setup();
@@ -97,6 +97,26 @@ describe("BookingFlow", () => {
     );
     expect(request.payment.paymentMethodId).toMatch(/^pm_/);
     expect(JSON.stringify(request)).not.toContain("4242424242424242");
+  });
+
+  it("keeps the form when the server can't be reached", async () => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    const user = renderFlow(() => Promise.reject(new TypeError("Failed to fetch")));
+
+    await user.type(screen.getByLabelText("Full Name"), "Jane Cooper");
+    await user.type(screen.getByLabelText("Email"), "jane@example.com");
+    await user.type(screen.getByLabelText("Phone"), "6195550199");
+    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.type(await screen.findByLabelText("Card number"), "4242424242424242");
+    await user.type(screen.getByLabelText("Expiry date"), "1230");
+    await user.type(screen.getByLabelText("Security code (CVV)"), "123");
+    await user.type(screen.getByLabelText("Billing zip code"), "92108");
+    await user.click(screen.getByRole("checkbox"));
+    await user.click(screen.getByRole("button", { name: "Book appointment" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("We couldn't reach the server.");
+    expect(screen.getByLabelText("Card number")).toHaveValue("4242 4242 4242 4242");
+    expect(screen.getByRole("checkbox")).toBeChecked();
   });
 
   it("shows every error on an empty submit and stays on Contact", async () => {
