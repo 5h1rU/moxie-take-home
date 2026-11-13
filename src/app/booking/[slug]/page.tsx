@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { BookingFlow } from "@/features/booking/BookingFlow";
 import { getBookingPage, getSelection } from "@/lib/api";
 import { createBooking } from "./actions";
@@ -15,8 +15,13 @@ export async function generateMetadata({ params }: PageProps<"/booking/[slug]">)
  * loading.tsx is the Suspense boundary for the whole page, including
  * BookingFlow's useSearchParams.
  */
-export default async function BookingPage({ params }: PageProps<"/booking/[slug]">) {
-  const { slug } = await params;
+export default async function BookingPage({ params, searchParams }: PageProps<"/booking/[slug]">) {
+  const [{ slug }, { step }] = await Promise.all([params, searchParams]);
+  // Entered details live only in browser memory, so a page load on Payment (a
+  // refresh or a pasted link) has none: start at step one. Moving between steps
+  // uses history.pushState, which doesn't reach the server.
+  if (step === "payment") redirect(`/booking/${encodeURIComponent(slug)}`);
+
   const [page, selection] = await Promise.all([getBookingPage(slug), getSelection(slug)]);
   if (!page || !selection) notFound();
 

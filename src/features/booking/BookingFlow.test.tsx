@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createBooking } from "@/app/booking/[slug]/actions";
@@ -130,11 +130,11 @@ describe("BookingFlow", () => {
     expect(window.location.search).toBe("");
   });
 
-  it("returns to Contact when Payment is opened without contact details", async () => {
+  it("shows Contact when the URL says Payment but there are no contact details", () => {
+    // The server redirects page loads on ?step=payment; this covers the client on its own.
     replaceState.call(window.history, null, "", "/booking/gold-spa?step=payment");
     renderFlow();
 
     expect(screen.getByRole("heading", { name: "Enter your details below" })).toBeInTheDocument();
-    await waitFor(() => expect(window.location.search).toBe("?step=contact"));
   });
 });

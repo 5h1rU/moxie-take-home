@@ -38,15 +38,6 @@ export function BookingFlow({
   // Once booked, the flow ignores the URL: going back can't reopen Payment.
   const step: Step = booking ? "confirmed" : wantsPayment && contact ? "payment" : "contact";
 
-  // A page load on ?step=payment (a refresh or a pasted link) has no contact
-  // details yet, so it renders step one: make the URL say so. Only on mount:
-  // later, contact details exist whenever the URL says payment.
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("step") === "payment") {
-      window.history.replaceState(null, "", "?step=contact");
-    }
-  }, []);
-
   // On step change, start keyboard and screen reader users at the new step's heading.
   const previousStep = useRef(step);
   useEffect(() => {

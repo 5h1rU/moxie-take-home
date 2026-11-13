@@ -11,14 +11,10 @@ import type { FieldErrors } from "./schemas";
  */
 export function useFormErrors(errors: FieldErrors) {
   const formRef = useRef<HTMLFormElement>(null);
+  // Fields edited since a submit result, remembered with that result. A new
+  // submit brings a new errors object, so the old edits no longer apply.
   const [edited, setEdited] = useState({ errors, names: new Set<string>() });
-
-  // A new submit result brings a new errors object: start over.
-  let names = edited.names;
-  if (edited.errors !== errors) {
-    names = new Set();
-    setEdited({ errors, names });
-  }
+  const names = edited.errors === errors ? edited.names : new Set<string>();
 
   useEffect(() => {
     if (Object.keys(errors).length === 0) return;
