@@ -46,7 +46,7 @@ export function Avatar({ src, name, size = 80 }: { src: string | null; name: str
 }
 
 export function Divider() {
-  return <hr className="w-full border-t-[1.5px] border-border" />;
+  return <hr className="border-t-[1.5px] border-border" />;
 }
 
 export function Alert({ children }: { children?: ReactNode }) {

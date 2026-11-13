@@ -9,19 +9,29 @@ export type StackProps = {
   children?: ReactNode;
   direction?: "row" | "column";
   gap?: Responsive<Space>;
-  align?: Align;
+  /** Cross-axis alignment. In a column, `stretch` (the default) gives children its full width. */
+  align?: Responsive<Align>;
   justify?: Justify;
   /** Semantic element to render. Layout never costs semantics. */
   as?: "div" | "ul" | "li";
 };
 
-const alignClasses: Record<Align, string> = {
-  start: "items-start",
-  center: "items-center",
-  end: "items-end",
-  stretch: "items-stretch",
-  baseline: "items-baseline",
-};
+const alignClasses = {
+  base: {
+    start: "items-start",
+    center: "items-center",
+    end: "items-end",
+    stretch: "items-stretch",
+    baseline: "items-baseline",
+  },
+  desktop: {
+    start: "desktop:items-start",
+    center: "desktop:items-center",
+    end: "desktop:items-end",
+    stretch: "desktop:items-stretch",
+    baseline: "desktop:items-baseline",
+  },
+} as const;
 
 const justifyClasses: Record<Justify, string> = {
   start: "justify-start",
@@ -38,7 +48,7 @@ export function Stack({ children, direction = "column", gap = 0, align, justify,
         "flex min-w-0",
         direction === "row" ? "flex-row" : "flex-col",
         responsiveClasses(gap, gapClasses),
-        align && alignClasses[align],
+        responsiveClasses(align, alignClasses),
         justify && justifyClasses[justify],
       )}
     >

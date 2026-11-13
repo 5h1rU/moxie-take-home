@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, type FormEvent } from "react";
-import { BottomBar, HStack, VStack } from "@/components/layout";
+import { BottomBar, VStack } from "@/components/layout";
 import { Card, Heading, TextField, Textarea } from "@/components/ui";
 import { SubmitButton } from "../components/FormButtons";
 import { formatPhoneInput, reformat } from "../format";
@@ -81,9 +81,10 @@ export function ContactStep({
           </VStack>
         </VStack>
         <BottomBar>
-          <HStack justify="end">
-            <SubmitButton fullWidth="belowDesktop">Continue</SubmitButton>
-          </HStack>
+          {/* Full width below desktop, right-aligned on desktop, as in the Figma bottom bar. */}
+          <VStack align={{ base: "stretch", desktop: "end" }}>
+            <SubmitButton>Continue</SubmitButton>
+          </VStack>
         </BottomBar>
       </form>
     </Card>

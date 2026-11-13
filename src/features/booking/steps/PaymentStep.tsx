@@ -164,7 +164,7 @@ export function PaymentStep({
           <Divider />
 
           {state.formError && <Alert>{state.formError}</Alert>}
-          <SubmitButton fullWidth>Book appointment</SubmitButton>
+          <SubmitButton>Book appointment</SubmitButton>
           <Text variant="bodySmall" tone="description">
             By creating this appointment, you acknowledge you will receive automated transactional messages from this
             merchant.

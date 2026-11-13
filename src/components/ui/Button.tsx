@@ -5,18 +5,16 @@ type ButtonProps = {
   children?: ReactNode;
   type?: "button" | "submit";
   variant?: "primary" | "text";
-  /** `belowDesktop`: full width on mobile and tablet, content width on desktop. */
-  fullWidth?: boolean | "belowDesktop";
   loading?: boolean;
   disabled?: boolean;
   onClick?: () => void;
 };
 
+/** Takes its width from the layout around it: a stretching stack makes it full width. */
 export function Button({
   children,
   type = "button",
   variant = "primary",
-  fullWidth = false,
   loading = false,
   disabled = false,
   onClick,
@@ -36,8 +34,6 @@ export function Button({
         variant === "text" &&
           // The negative margin keeps the label aligned with the content edge while the padding keeps the hit area.
           "-mx-2 rounded-lg px-2 py-2 text-primary hover:underline disabled:text-muted disabled:no-underline",
-        fullWidth === true && "w-full",
-        fullWidth === "belowDesktop" && "w-full desktop:w-auto",
       )}
     >
       {loading && <Spinner />}
